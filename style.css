@@ -1,0 +1,31 @@
+/* Custom styling to improve the layout */
+body {
+    background-color: #11191f; /* Matches the dark theme */
+}
+
+main.container {
+    padding-top: 2rem;
+    max-width: 800px;
+}
+
+h1 {
+    color: #3fb1e5; /* Gives your title a nice tech blue color */
+}
+
+article {
+    margin-bottom: 2rem;
+    border: 1px solid #2d3135;
+    transition: transform 0.2s;
+}
+
+/* Adds a cool hover effect to your news cards */
+article:hover {
+    transform: translateY(-5px);
+    border-color: #3fb1e5;
+}
+
+footer a[role="button"] {
+    background-color: #3fb1e5;
+    border-color: #3fb1e5;
+    color: #fff;
+}
