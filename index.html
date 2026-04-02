@@ -3,84 +3,103 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Tech News Dashboard</title>
+    <title>Global Tech Pulse | AI News Dashboard</title>
+    
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
     
     <style>
-        /* Custom UI Enhancements */
         :root {
             --primary: #3fb1e5;
+            --card-bg: #1c2128;
+            --body-bg: #0f1419;
+            --text-muted: #8b949e;
         }
+
         body {
-            background-color: #0f1419;
+            background-color: var(--body-bg);
+            transition: background-color 0.3s ease;
         }
+
         main.container {
             padding-top: 3rem;
-            max-width: 900px;
+            max-width: 800px;
         }
+
         h1 {
             color: var(--primary);
             font-weight: 800;
             margin-bottom: 0.5rem;
         }
+
         h2 {
             font-size: 1.1rem;
             color: #8899a6;
             margin-bottom: 3rem;
         }
+
         article {
-            background: #1c2128;
+            background: var(--card-bg);
             border: 1px solid #30363d;
             border-radius: 12px;
-            transition: all 0.3s ease;
+            transition: transform 0.3s ease, border-color 0.3s ease;
             margin-bottom: 2rem;
         }
+
         article:hover {
-            transform: translateY(-8px);
+            transform: translateY(-5px);
             border-color: var(--primary);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.4);
         }
+
         header strong {
-            font-size: 1.25rem;
+            font-size: 1.3rem;
             color: #f0f6fc;
         }
+
         p {
-            color: #8b949e;
+            color: var(--text-muted);
         }
-        .outline-btn {
+
+        /* Custom Button Styling */
+        .custom-btn {
             display: inline-block;
+            background-color: var(--primary) !important;
+            color: #ffffff !important;
             border: 2px solid var(--primary) !important;
-            color: #ffffff !important; /* Forces text to be white */
-            background-color: var(--primary) !important; /* Keeps button blue */
             font-weight: bold;
             border-radius: 8px;
-            padding: 10px 20px;
+            padding: 0.6rem 1.2rem;
             text-decoration: none;
+            transition: all 0.3s ease;
         }
-        
-        .outline-btn:hover {
-            background-color: #ffffff !important; /* Turns button white on hover */
-            color: var(--primary) !important; /* Turns text blue on hover */
+
+        .custom-btn:hover {
+            background-color: #ffffff !important;
+            color: var(--primary) !important;
             border-color: #ffffff !important;
+        }
+
+        #news-container {
+            min-height: 400px;
         }
     </style>
 </head>
 <body>
+
     <main class="container">
         <hgroup>
             <h1>Global Tech Pulse</h1>
-            <h2>Real-time AI & Technology Insights</h2>
+            <h2>Curated AI & Technology Insights</h2>
         </hgroup>
 
         <section id="news-container">
-            <p aria-busy="true">Connecting to NewsAPI servers...</p>
+            <p aria-busy="true">Connecting to global news feed...</p>
         </section>
     </main>
 
     <script>
         const apiKey = 'cdde8b3131b645b5b4696ae3cc8a8300';
-        // We use 'everything' and 'q=technology' for better compatibility
-        const url = `https://newsapi.org/v2/everything?q=technology&language=en&pageSize=10&apiKey=${apiKey}`;
+        const url = `https://newsapi.org/v2/everything?q=technology+AI&language=en&pageSize=8&apiKey=${apiKey}`;
 
         async function fetchNews() {
             const container = document.getElementById('news-container');
@@ -88,45 +107,61 @@
                 const response = await fetch(url);
                 const data = await response.json();
 
-                // If NewsAPI blocks the request (Common on GitHub Pages Free Tier)
-                if (data.status !== "ok") {
-                    throw new Error("API_RESTRICTED");
-                }
+                if (data.status !== "ok") throw new Error("API_LIMIT_REACHED");
 
                 renderArticles(data.articles);
             } catch (error) {
-                console.warn("Using Portfolio Backup Data (API restricted on live host)");
-                
-                // This ensures your project ALWAYS looks full and professional
-                const backupData = [
-                    { title: "Generative AI: The Next Frontier in Coding", description: "How Large Language Models are changing the way developers write and debug code in 2026.", url: "https://techcrunch.com" },
-                    { title: "Quantum Supremacy Milestone", description: "Researchers achieve stable qubits at room temperature, marking a massive leap for computing.", url: "https://wired.com" },
-                    { title: "The Evolution of Edge Computing", description: "Processing data closer to the source is reducing latency for IoT devices globally.", url: "https://theverge.com" },
-                    { title: "Cybersecurity in the Age of AI", description: "New defensive algorithms are being deployed to fight automated phishing attacks.", url: "https://zdnet.com" },
-                    { title: "Future of Sustainable Tech", description: "Green hardware initiatives are reducing the carbon footprint of data centers by 40%.", url: "https://bloomberg.com" }
-                ];
-                renderArticles(backupData);
+                console.warn("API restricted on live host. Loading portfolio demo data.");
+                loadBackupData();
             }
+        }
+
+        function loadBackupData() {
+            const backupData = [
+                { 
+                    title: "The Future of Neural Networks", 
+                    description: "Exploring how the next generation of transformer models will handle multi-modal inputs natively.", 
+                    url: "https://techcrunch.com" 
+                },
+                { 
+                    title: "Quantum Computing: From Theory to Reality", 
+                    description: "Major tech firms announce a roadmap for 1,000-qubit systems by late 2026.", 
+                    url: "https://wired.com" 
+                },
+                { 
+                    title: "Open Source AI Safety Protocols", 
+                    description: "Leading developers agree on a new framework for testing large-scale autonomous agents.", 
+                    url: "https://theverge.com" 
+                },
+                { 
+                    title: "Sustainable Semiconductors", 
+                    description: "How new manufacturing processes are cutting the water usage of chip fabrication by half.", 
+                    url: "https://bloomberg.com" 
+                }
+            ];
+            renderArticles(backupData);
         }
 
         function renderArticles(articles) {
             const container = document.getElementById('news-container');
             container.innerHTML = ''; 
+            
             articles.forEach(article => {
                 if(article.title && article.description) {
-                    container.innerHTML += `
-                        <article>
-                            <header><strong>${article.title}</strong></header>
-                            <p>${article.description}</p>
-                            <footer>
-                                <a href="${article.url}" target="_blank" role="button" class="outline-btn">Read Full Story</a>
-                            </footer>
-                        </article>
+                    const card = document.createElement('article');
+                    card.innerHTML = `
+                        <header><strong>${article.title}</strong></header>
+                        <p>${article.description}</p>
+                        <footer>
+                            <a href="${article.url}" target="_blank" class="custom-btn">Read Full Story</a>
+                        </footer>
                     `;
+                    container.appendChild(card);
                 }
             });
         }
 
+        // Initialize the app
         fetchNews();
     </script>
 </body>
