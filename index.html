@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Tech News Dash</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <main class="container">
+        <hgroup>
+            <h1>Global News Dashboard</h1>
+            <h2>Fetching live headlines using NewsAPI</h2>
+        </hgroup>
+
+        <section id="news-container">
+            <p>Loading the latest stories...</p>
+        </section>
+    </main>
+
+    <script>
+        const apiKey = 'cdde8b3131b645b5b4696ae3cc8a8300';
+const url = `https://newsapi.org/v2/top-headlines?category=technology&language=en&apiKey=${apiKey}`;
+
+async function fetchNews() {
+    try {
+        const response = await fetch(url);
+        const data = await response.json();
+        const container = document.getElementById('news-container');
+        container.innerHTML = ''; // Clear the "Loading" text
+
+        data.articles.forEach(article => {
+            if(article.title && article.description) {
+                const articleHtml = `
+                    <article>
+                        <header><strong>${article.title}</strong></header>
+                        <p>${article.description}</p>
+                        <footer>
+                            <a href="${article.url}" target="_blank" role="button" class="outline">Read More</a>
+                        </footer>
+                    </article>
+                `;
+                container.innerHTML += articleHtml;
+            }
+        });
+    } catch (error) {
+        console.error("Error fetching news:", error);
+        document.getElementById('news-container').innerHTML = "<p>Failed to load news. Check your API key!</p>";
+    }
+}
+
+fetchNews();
+    </script>
+</body>
+</html>
