@@ -98,71 +98,90 @@
     </main>
 
     <script>
-        const apiKey = 'cdde8b3131b645b5b4696ae3cc8a8300';
-        const url = `https://newsapi.org/v2/everything?q=technology+AI&language=en&pageSize=8&apiKey=${apiKey}`;
+    const apiKey = 'cdde8b3131b645b5b4696ae3cc8a8300';
+    const url = `https://newsapi.org/v2/everything?q=technology+AI&language=en&pageSize=8&apiKey=${apiKey}`;
 
-        async function fetchNews() {
-            const container = document.getElementById('news-container');
-            try {
-                const response = await fetch(url);
-                const data = await response.json();
+    async function fetchNews() {
+        const container = document.getElementById('news-container');
+        try {
+            const response = await fetch(url);
+            const data = await response.json();
 
-                if (data.status !== "ok") throw new Error("API_LIMIT_REACHED");
+            if (data.status !== "ok") throw new Error("API_RESTRICTED");
 
-                renderArticles(data.articles);
-            } catch (error) {
-                console.warn("API restricted on live host. Loading portfolio demo data.");
-                loadBackupData();
+            renderArticles(data.articles);
+        } catch (error) {
+            console.warn("API Restricted on live host. Loading curated news stories.");
+            loadCuratedStories();
+        }
+    }
+
+    function loadCuratedStories() {
+        const backupData = [
+            { 
+                title: "DLSS 5: Has Nvidia’s AI graphics technology gone too far?", 
+                description: "Nvidia revealed a '3D guided neural rendering model' that changes lighting in real-time. From memes to 'yassified' characters, gamers are divided.", 
+                url: "https://www.theverge.com" 
+            },
+            { 
+                title: "Signal’s Creator Is Helping Encrypt Meta AI", 
+                description: "Moxie Marlinspike is integrating technology from his encrypted chatbot, Confer, into Meta AI to protect millions of conversations.", 
+                url: "https://wired.com" 
+            },
+            { 
+                title: "Why people really hate AI", 
+                description: "There's an increasing disconnect in culture. While companies hunt for places to deploy AI, the public sentiment is shiftly rapidly.", 
+                url: "https://techcrunch.com" 
+            },
+            { 
+                title: "Anthropic Sues Dept of Defense Over Supply-Chain Risk", 
+                description: "The Claude developer claims the administration overstepped by escalating a contract dispute into a federal ban on their technology.", 
+                url: "https://bloomberg.com" 
+            },
+            { 
+                title: "Bespoke AI models are the next big thing in filmmaking", 
+                description: "Hollywood 'AI slop' fears might be premature as creators move toward highly customized models for high-end production.", 
+                url: "https://wired.com" 
+            },
+            { 
+                title: "Hasbro CEO: Magic & D&D Will Never Use Generative AI", 
+                description: "Both major brands have solidified guidelines barring the use of generative technology in their core artistic products.", 
+                url: "https://www.polygon.com" 
+            },
+            { 
+                title: "Sony’s 'Protective AI' aims to defeat Ghibli slop", 
+                description: "Sony is building an in-house machine to protect rights holders from copyright infringement by identifying AI-generated content.", 
+                url: "https://www.ign.com" 
+            },
+            { 
+                title: "Nvidia’s $4 Billion photonics investment", 
+                description: "Nvidia is investing heavily in Lumentum and Coherent to develop optical lasers that move AI data at unprecedented speeds.", 
+                url: "https://www.reuters.com" 
             }
-        }
+        ];
+        renderArticles(backupData);
+    }
 
-        function loadBackupData() {
-            const backupData = [
-                { 
-                    title: "The Future of Neural Networks", 
-                    description: "Exploring how the next generation of transformer models will handle multi-modal inputs natively.", 
-                    url: "https://techcrunch.com" 
-                },
-                { 
-                    title: "Quantum Computing: From Theory to Reality", 
-                    description: "Major tech firms announce a roadmap for 1,000-qubit systems by late 2026.", 
-                    url: "https://wired.com" 
-                },
-                { 
-                    title: "Open Source AI Safety Protocols", 
-                    description: "Leading developers agree on a new framework for testing large-scale autonomous agents.", 
-                    url: "https://theverge.com" 
-                },
-                { 
-                    title: "Sustainable Semiconductors", 
-                    description: "How new manufacturing processes are cutting the water usage of chip fabrication by half.", 
-                    url: "https://bloomberg.com" 
-                }
-            ];
-            renderArticles(backupData);
-        }
+    function renderArticles(articles) {
+        const container = document.getElementById('news-container');
+        container.innerHTML = ''; 
+        
+        articles.forEach(article => {
+            if(article.title && article.description) {
+                const card = document.createElement('article');
+                card.innerHTML = `
+                    <header><strong>${article.title}</strong></header>
+                    <p>${article.description}</p>
+                    <footer>
+                        <a href="${article.url}" target="_blank" class="custom-btn">Read Full Story</a>
+                    </footer>
+                `;
+                container.appendChild(card);
+            }
+        });
+    }
 
-        function renderArticles(articles) {
-            const container = document.getElementById('news-container');
-            container.innerHTML = ''; 
-            
-            articles.forEach(article => {
-                if(article.title && article.description) {
-                    const card = document.createElement('article');
-                    card.innerHTML = `
-                        <header><strong>${article.title}</strong></header>
-                        <p>${article.description}</p>
-                        <footer>
-                            <a href="${article.url}" target="_blank" class="custom-btn">Read Full Story</a>
-                        </footer>
-                    `;
-                    container.appendChild(card);
-                }
-            });
-        }
-
-        // Initialize the app
-        fetchNews();
-    </script>
+    fetchNews();
+</script>
 </body>
 </html>
